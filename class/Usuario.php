@@ -49,18 +49,13 @@ class Usuario{
     public function loadById($id){
         
         $sql = new Sql();
-        $result = $sql->select("SELECT * FROM tb_usuarios WHERE idusuario = :ID", array(
+        $results = $sql->select("SELECT * FROM tb_usuarios WHERE idusuario = :ID", array(
             ":ID"=>$id
         ));
 
-        if(count($result[0]) > 0){
+        if(count($results[0]) > 0){
 
-            $row = $result[0];
-            $this->setIdusuario($row['idusuario']);
-            $this->setDeslogin($row['deslogin']);
-            $this->setNome($row['nome']);  
-            $this->setDessenha($row['dessenha']);
-            $this->setDtcadastro(new Datetime($row['dtcadastro'])); 
+            $this->setDados($results[0]); 
            
         }
     }
@@ -126,19 +121,14 @@ class Usuario{
     public function login($login, $password){
         
         $sql = new Sql();
-        $result = $sql->select("SELECT * FROM tb_usuarios WHERE deslogin = :LOGIN  AND dessenha = :PASSWORD", array(
+        $results = $sql->select("SELECT * FROM tb_usuarios WHERE deslogin = :LOGIN  AND dessenha = :PASSWORD", array(
             ":LOGIN"=>$login,
             "PASSWORD"=>$password
         ));
 
-        if(count($result) > 0){
+        if(count($results) > 0){            
 
-            $row = $result[0];
-            $this->setIdusuario($row['idusuario']);
-            $this->setDeslogin($row['deslogin']); 
-            $this->setNome($row['nome']);
-            $this->setDessenha($row['dessenha']);
-            $this->setDtcadastro(new Datetime($row['dtcadastro'])); 
+            $this->setDados($results[0]);
            
         } else {
             throw new Exception("LOGIN E OU SENHA INVÁLIDOS");
@@ -149,6 +139,57 @@ class Usuario{
      /*FIM Metodo search*/
 
 //============================================================================
+
+
+//Criar usuário
+public function criarUsuario(){
+    $sql = new Sql();
+
+    $results = $sql->select("CALL sp_usuarios_insert(:LOGIN, :PASSWORD, :NAME)", array(
+        ":LOGIN"=>$this->getDeslogin(),
+        ":PASSWORD"=>$this->getDessenha(),
+        ":NAME"=>$this->getNome()
+    ));
+
+    if(count($results) > 0){            
+
+        $this->setDados($results[0]);
+       
+    }
+}
+
+
+//Fim Criar usuário
+
+public function setDados($dados){
+
+    $this->setIdusuario($dados['idusuario']);
+    $this->setDeslogin($dados['deslogin']); 
+    $this->setNome($dados['nome']);
+    $this->setDessenha($dados['dessenha']);
+    $this->setDtcadastro(new Datetime($dados['dtcadastro']));  
+
+
+}
+
+//Criar usuário
+public function atualizaUsuario($login, $password, $nome){
+    
+    $this->setDeslogin($login);
+    $this->setDessenha($password);
+    $this->setNome($nome);
+    
+    
+    $sql = new Sql();
+
+    $sql->query("UPDATE tb_usuarios SET deslogin =:LOGIN, desenha = :PASSWORD, nome = :NAME WHERE idusuario = :ID", array(
+        ":LOGIN"=>$this->getDeslogin(),
+        ":PASSWORD"=>$this->getDessenha(),
+        ":NAME"=>$this->getNome(),
+        ":ID"=>$this->getIdusuario()
+    ));
+
+}
 
 }
 

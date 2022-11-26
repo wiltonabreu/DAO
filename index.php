@@ -38,8 +38,34 @@ require_once("config.php");
 //Carrega usuario autenticado
 
 // O metodo login não pode ser estatico, porque ele vai estar amarrado à classe pelo $this
+//$usuario = new Usuario();
+//$usuario->login("maria","123456");
+
+//echo $usuario;
+
+
+
+//Insere usuario
+// O metodo criarUsuario
+/*
 $usuario = new Usuario();
-$usuario->login("maria","123456");
+
+$usuario->setDeslogin("wilton.paula");
+$usuario->setDessenha("123.qwe");
+$usuario->setNome("Wilton de Paula");
+
+$usuario->criarUsuario();
 
 echo $usuario;
+*/
+
+//Atuaiza usuario
+// O metodo atualizaUsuario
+
+$usuario = new Usuario();
+$usuario->loadById(5);
+$usuario->atualizaUsuario("wilton_abreu","123.qwe!@#", "Wilton Abreu de Paula");
+
+echo $usuario;
+
 ?>
