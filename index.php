@@ -61,11 +61,20 @@ echo $usuario;
 
 //Atuaiza usuario
 // O metodo atualizaUsuario
-
+/*
 $usuario = new Usuario();
 $usuario->loadById(5);
 $usuario->atualizaUsuario("wilton_abreu","123.qwe!@#", "Wilton Abreu de Paula");
 
 echo $usuario;
+*/
 
+//Deleta usuario
+// O metodo delete
+
+$usuario = new Usuario();
+$usuario->loadById(5);
+$usuario->delete();
+
+echo $usuario;
 ?>

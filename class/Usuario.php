@@ -7,7 +7,7 @@ class Usuario{
     private $dessenha;
     private $dtcadastro;
 
-    public function getIdusuario(){
+    public function getIdusuario():int{
         return $this->idusuario;
     }
     public function setIdusuario($value){
@@ -179,15 +179,32 @@ public function atualizaUsuario($login, $password, $nome){
     $this->setDessenha($password);
     $this->setNome($nome);
     
-    
+   // var_dump($this->getIdusuario());exit;
     $sql = new Sql();
 
-    $sql->query("UPDATE tb_usuarios SET deslogin =:LOGIN, desenha = :PASSWORD, nome = :NAME WHERE idusuario = :ID", array(
+    $sql->query("UPDATE tb_usuarios SET deslogin =:LOGIN, dessenha = :PASSWORD, nome = :NAME WHERE idusuario = :ID", array(
         ":LOGIN"=>$this->getDeslogin(),
         ":PASSWORD"=>$this->getDessenha(),
         ":NAME"=>$this->getNome(),
         ":ID"=>$this->getIdusuario()
     ));
+
+}
+
+//Deletar usuário
+
+public function delete(){
+    $sql = new Sql();
+    $sql->query("DELETE FROM tb_usuarios WHERE idusuario = :ID", array(
+        ':ID'=>$this->getIdusuario()
+    ));
+
+    $this->setIdusuario(0);
+    $this->setDeslogin("");
+    $this->setDessenha("");
+    $this->setNome("");
+    $this->setDtcadastro(new DateTime());
+    
 
 }
 
